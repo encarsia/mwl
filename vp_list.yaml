@@ -1,0 +1,439 @@
+clockwise:
+  VP1:
+    name: Brandenburger Tor
+    km: 7,3
+    km_kum: 7,3
+  VP2:
+    name: East Side Gallery
+    km: 6,46
+    km_kum: 13,76
+  VP3:
+    name: Dammweg
+    km: 5,90
+    km_kum: 19,66
+  VP4:
+    name: Johannisthaler Chaussee
+    km: 5,64
+    km_kum: 25,3
+  VP5:
+    name: U-Bahnhof Rudow
+    km: 5,9
+    km_kum: 31,2
+  VP6:
+    name: Buckow
+    km: 4,92
+    km_kum: 36,12
+  VP7:
+    name: Kirchhainer Damm
+    km: 6,17
+    km_kum: 42,29
+  VP8:
+    name: Lichtenrade
+    km: 4,37
+    km_kum: 46,66
+  VP9:
+    name: Osdorfer Straße
+    km: 5,71
+    km_kum: 52,37
+  VP10:
+    name: Sportplatz Teltow
+    km: 6,50
+    km_kum: 58,87
+  VP11:
+    name: Königsweg
+    km: 6,22
+    km_kum: 65,09
+  VP12:
+    name: Gedenkstätte Griebnitzsee
+    km: 6,85
+    km_kum: 71,94
+  VP13:
+    name: Brauhaus Meierei
+    km: 6,88
+    km_kum: 78,82
+  VP14:
+    name: Revierförsterei Krampnitz
+    km: 5,7
+    km_kum: 84,52
+  VP15:
+    name: Schloss Sacrow
+    km: 6,24
+    km_kum: 90,76
+  VP16:
+    name: Pagel & Friends
+    km: 7,6
+    km_kum: 98,36
+  VP17:
+    name: Karolinenhöhe
+    km: 4,91
+    km_kum: 103,27
+  VP18:
+    name: Falkenseer Chaussee
+    km: 6,6
+    km_kum: 109,87
+  VP19:
+    name: Schönwalde
+    km: 5,95
+    km_kum:  115,82
+  VP20:
+    name: Grenzturm Nieder Neuendorf
+    km: 7,6
+    km_kum: 123,42
+  VP21:
+    name: Ruderclub Oberhavel
+    km: 4,78
+    km_kum: 128,2
+  VP22:
+    name: Frohnau
+    km: 4,07
+    km_kum: 132,27
+  VP23:
+    name: Naturschutzturm
+    km: 6,61
+    km_kum: 138,88
+  VP24:
+    name: Oranienburger Chaussee
+    km: 4,98
+    km_kum: 143,86
+  VP25:
+    name: Lauftreff Lübars
+    km: 5,34
+    km_kum: 149,2
+  VP26:
+    name: Wilhelmsruh
+    km: 5,72
+    km_kum: 154,92
+  VP27:
+    name: Wollankstrasse
+    km: 3,02
+    km_kum: 157,94
+  Ziel:
+    name: Friedrich-Ludwig-Jahn-Sportpark
+    km: 3,96
+    km_kum: 161,9
+
+clockwise_new:
+  VP1:
+    name: Checkpoint Charlie
+    km: 8,6
+    km_kum: 8,6
+  VP2:
+    name: East Side Gallery
+    km: 4,8
+    km_kum: 13,4
+  VP3:
+    name: Dammweg
+    km: 5,8
+    km_kum: 19,2
+  VP4:
+    name: Johannisthaler Chaussee
+    km: 5,7
+    km_kum: 24,9
+  VP5:
+    name: Imbiss "Am Ziel"/Dörferblick
+    km: 9,5
+    km_kum: 34,4
+  VP6:
+    name: Buckow
+    km: 4,5
+    km_kum: 38,9
+  VP7:
+    name: Ninas Eltern
+    km: 7,6
+    km_kum: 46,5
+  VP8:
+    name: Osdorfer Straße
+    km: 6,3
+    km_kum: 52,8
+  VP9:
+    name: Sportplatz Teltow
+    km: 6,5
+    km_kum: 59,3
+  VP10:
+    name: Königsweg
+    km: 6,2
+    km_kum: 65,5
+  VP11:
+    name: Gedenkstätte Griebnitzsee
+    km: 6,8
+    km_kum: 72,3
+  VP12:
+    name: Brauhaus Meierei
+    km: 6,9
+    km_kum: 79,2
+  VP13:
+    name: Revierförsterei Krampnitz
+    km: 5,7
+    km_kum: 84,9
+  VP14:
+    name: Schloss Sacrow
+    km: 6,3
+    km_kum: 91,2
+  VP15:
+    name: Pagel & Friends
+    km: 7,6
+    km_kum: 98,8
+  VP16:
+    name: Karolinenhöhe
+    km: 4,9
+    km_kum: 103,7
+  VP17:
+    name: Falkenseer Chaussee
+    km: 6,5
+    km_kum: 110,2
+  VP18:
+    name: Schönwalde
+    km: 5,8
+    km_kum:  116,0
+  VP19:
+    name: Grenzturm Nieder Neuendorf
+    km: 7,3
+    km_kum: 123,3
+  VP20:
+    name: Ruderclub Oberhavel
+    km: 4,8
+    km_kum: 128,1
+  VP21:
+    name: Frohnau
+    km: 4,1
+    km_kum: 132,2
+  VP22:
+    name: Naturschutzturm
+    km: 6,4
+    km_kum: 138,6
+  VP23:
+    name: Oranienburger Chaussee
+    km: 4,5
+    km_kum: 143,1
+  VP24:
+    name: Lauftreff Lübars
+    km: 5,3
+    km_kum: 148,4
+  VP25:
+    name: Wilhelmsruh
+    km: 5,7
+    km_kum: 154,1
+  VP26:
+    name: Wollankstrasse
+    km: 3,1
+    km_kum: 157,2
+  Ziel:
+    name: Friedrich-Ludwig-Jahn-Sportpark
+    km: 4,2
+    km_kum: 161,9
+
+clockwise_2011:
+  VP1:
+    name: Klein-Ziethener Weg
+    km: 22,2
+    km_kum: 22,2
+  VP2:
+    name: Osdorfer Straße
+    km: 20,4
+    km_kum: 42,6
+  VP3:
+    name: Bahnhof Griebnitzsee
+    km: 19,7
+    km_kum: 62,3
+  VP4:
+    name: Kladower Straße
+    km: 20,3
+    km_kum: 82,6
+  VP5:
+    name: Gartenlaube
+    km: 10,2
+    km_kum: 92,8
+  VP6:
+    name: Lauftreff Schönwalde
+    km: 12,5
+    km_kum: 105,3
+  VP7:
+    name: Ruderclub Oberhavel
+    km: 12,3
+    km_kum: 117,6
+  VP8:
+    name: Hattwichstraße
+    km: 15,4
+    km_kum: 133
+  VP9:
+    name: Gedenkstätte
+    km: 19,5
+    km_kum: 152,5
+  Ziel:
+    name: Stadion Lobeckstraße
+    km: 8,4
+    km_kum: 160,9
+    
+counterclockwise_2013:
+  VP1:
+    name: Gedenkstätte Litfin
+    km: 6,28
+    km_kum: 6,28
+  VP2:
+    name: Behmstraßenbrücke
+    km: 5,04
+    km_kum: 11,32
+  VP3:
+    name: Lübars
+    km: 10,78
+    km_kum: 22,10
+  VP4:  
+    name: Naturschutzturm Hohen Neuendorf
+    km: 10,42
+    km_kum: 32,52
+  VP5:
+    name: Ruderclub Oberhavel
+    km: 10,84
+    km_kum: 43,36
+  VP6:
+    name: Schönwalde
+    km: 11,99
+    km_kum: 55,35
+  VP7:
+    name: Gartenlaube Pletscher
+    km: 12,72
+    km_kum: 68,07
+  VP8:
+    name: Schloss Sacrow
+    km: 12,46
+    km_kum: 80,53
+  VP9:
+    name: Gedenkstätte Griebnitzsee
+    km: 19,12
+    km_kum: 99,65
+  VP10:
+    name: Sportplatz Teltow
+    km: 13,10
+    km_kum: 112,75
+  VP11:
+    name: Lichtenrade
+    km: 12,17
+    km_kum: 124,92
+  VP12:
+    name: Buckower Damm
+    km: 10,06
+    km_kum: 134,98
+  VP13:
+    name: (kein Name)
+    km: 10,06
+    km_kum: 144,87
+  Ziel:
+    name: Stadion Lobeckstraße
+    km: 16,01
+    km_kum: 160,90
+
+counterclockwise:
+  VP1:
+    name: Wilhelmsruh
+    km: 6,94
+    km_kum: 6,94
+  VP2:
+    name: Lauftreff Lübars
+    km: 5,69
+    km_kum: 12,63
+  VP3:
+    name: Oranienburger Chaussee
+    km: 5,74
+    km_kum: 18,37
+  VP4:
+    name: Naturschutzturm
+    km: 4,70
+    km_kum: 23,07
+  VP5:
+    name: Frohnau
+    km: 6,80
+    km_kum: 29,87
+  VP6:
+    name: Ruderclub Oberhavel
+    km: 4,06
+    km_kum: 33,93
+  VP7:
+    name: Grenzturm Nieder Neuendorf
+    km: 4,75
+    km_kum: 38,68
+  VP8:
+    name: Schönwalde
+    km: 7,52
+    km_kum: 46,20
+  VP9:
+    name: Falkenseer Chausse
+    km: 5,76
+    km_kum: 51,96
+  VP10:
+    name: Karolinenhöhe
+    km: 6,54
+    km_kum: 58,50
+  VP11:
+    name: Pagel & Friends
+    km: 4,90
+    km_kum: 63,40
+  VP12:
+    name: Schloss Sacrow
+    km: 7,62
+    km_kum: 71,02
+  VP13:
+    name: Revierförsterei Krampnitz
+    km: 6,21
+    km_kum: 77,23
+  VP14:
+    name: Brauhaus Meierei
+    km: 6,00
+    km_kum: 83,23
+  VP15:
+    name: Gedenkstätte Griebnitzsee
+    km: 6,90
+    km_kum: 90,13
+  VP16:
+    name: Königsweg
+    km: 6,87
+    km_kum: 97,00
+  VP17:
+    name: Sportplatz Teltow
+    km: 6,20
+    km_kum: 103,20
+  VP18:
+    name: Osdorfer Straße
+    km: 6,50
+    km_kum: 109,70
+  VP19:
+    name: Lichtenrade
+    km: 5,70
+    km_kum: 115,40
+  VP20:
+    name: Kirchhainer Damm
+    km: 4,37
+    km_kum: 119,77
+  VP21:
+    name: Buckow
+    km: 6,43
+    km_kum: 126,20
+  VP22:
+    name: Rudow
+    km: 4,90
+    km_kum: 131,10
+  VP23:
+    name: Johannisthaler Chaussee
+    km: 5,90
+    km_kum: 137,00
+  VP24:
+    name: Dammweg
+    km: 5,70
+    km_kum: 142,70
+  VP25:
+    name: East Side Gallery
+    km: 5,80
+    km_kum: 148,50
+  VP26:
+    name: Checkpoint Charlie
+    km: 5,28
+    km_kum: 153,78
+  VP27:
+    name: Gedenkstätte Günter Litfin
+    km: 3,32
+    km_kum: 157,10
+  Ziel:
+    name: Friedrich-Ludwig-Jahn-Sportpark
+    km: 4,60
+    km_kum: 161,70
+
+
