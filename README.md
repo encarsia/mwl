@@ -12,6 +12,7 @@
 
 * die Daten wurden von [SPORTident](https://www.sportident.com/) erfasst und sind als csv-Dateien verfügbar (oben rechts unter "Downloads" auf der jeweiligen Veranstaltungsseite)
 * die von der SPORTident-Webseite heruntergeladenen csv-Dateien sind nicht UTF-8-kodiert
+* die Ergebnislisten bis 2018 befinden sich im Ordner ``SI_results``
 
 ## Benutzung
 
@@ -55,6 +56,12 @@ res.vp_stats("VP5")
 res.vp_stats("VP5", "f") 
 res.vp_stats("VP5", "m") 
 res.vp_stats("VP5", "r")
+
+# Wie zuvor, Anzeige der ersten n Läufer (default 10, 0 für alle)
+res.vp_stats("VP5", "f", 3) # listet die ersten 3 Männer 
+res.vp_stats("VP5", "m", 20) # listet die ersten 20 Frauen
+res.vp_stats("VP5", "r", 0) # listet alle Staffeln
+res.vp_stats("VP5", "all", 0) # listet alle
 ```
 
 #### Ausgabe
@@ -63,21 +70,22 @@ res.vp_stats("VP5", "r")
 VP5 - U-Bahnhof Rudow - km 31,2
 ************************************************************************
 Anzahl Läufer: 254
-1.:  8:20:08 Uhr (Nagata, Tsutomu)
-2.:  8:24:18 Uhr (Perkins, Mark)
-3.:  8:25:07 Uhr (Bonfiglio, Marco)
-4.:  8:26:24 Uhr (Morstabilini, luca)
-5.:  8:27:00 Uhr (Tribius, Thomas)
-6.:  8:38:49 Uhr (Brade, Benjamin)
-7.:  8:38:55 Uhr (Klug, Matthias)
-8.:  8:39:00 Uhr (Strykowski, Jaroslaw)
-9.:  8:41:20 Uhr (Lingg, Dieter)
-10.: 8:42:32 Uhr (Kuehner, Christof)
 
-25 %:   9:13:54 Uhr
-50 %:   9:35:07 Uhr
-75 %:   9:53:32 Uhr
-100% :  11:07:10 Uhr (Läufer, Besen)
+1.: 8:20:08 Uhr - Nagata, Tsutomu (239)
+2.: 8:24:18 Uhr - Perkins, Mark (177)
+3.: 8:25:07 Uhr - Bonfiglio, Marco (199)
+4.: 8:26:24 Uhr - Morstabilini, luca (203)
+5.: 8:27:00 Uhr - Tribius, Thomas (228)
+6.: 8:38:49 Uhr - Brade, Benjamin (181)
+7.: 8:38:55 Uhr - Klug, Matthias (216)
+8.: 8:39:00 Uhr - Strykowski, Jaroslaw (135)
+9.: 8:41:20 Uhr - Lingg, Dieter (210)
+10.: 8:42:32 Uhr - Kuehner, Christof (268)
+
+25 %:  9:13:54 Uhr
+50 %:  9:35:07 Uhr
+75 %:  9:53:32 Uhr
+100 %: 11:07:10 Uhr (Läufer, Besen)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Split pace in min/km
 
@@ -98,6 +106,12 @@ res.stats_to_file()
 res.stats_to_file("f") 
 res.stats_to_file("m") 
 res.stats_to_file("r")
+
+# Wie zuvor, Anzeige der ersten n Läufer (default 0 für alle)
+res.stats_to_filevp_stats("VP5", "f", 10) # listet jeweils die ersten 10
+res.stats_to_filevp_stats("VP5", "m", 10)
+res.stats_to_filevp_stats("VP5", "r", 10)
+res.stats_to_filevp_stats("VP5", "all", 10)
 ```
 
 ### Ranking
@@ -111,21 +125,21 @@ print(res.ranking)
 ```
 Ranking
 ~~~~~~~
-Platz StartNr Name                                     Zeit       Kategorie
----------------------------------------------------------------------------------
-1     177     Perkins, Mark                            13:06:52   Senioren M30 (30-34 Jahre)
-2     199     Bonfiglio, Marco                         14:04:27   Senioren M35 (35-39 Jahre)
+Platz StartNr Name                      Zeit       Kategorie
+-----------------------------------------------------------------
+1     177     Perkins, Mark             13:06:52   Senioren M30 (30-34 Jahre)
+2     199     Bonfiglio, Marco          14:04:27   Senioren M35 (35-39 Jahre)
 [...]
-1     266     Seidel, Grit                             18:16:29   Seniorinnen W40 (40-44 Jahre)
+1     266     Seidel, Grit              18:16:29   Seniorinnen W40 (40-44 Jahre)
 [...]
-15    10000   Läufer, Besen                            29:01:19   Staffel 4 x 40 km
+15    10000   Läufer, Besen             29:01:19   Staffel 4 x 40 km
 [...]
 ```
 
 ### Läuferdetails
 
 ```python
-res.runner_stats(100) # StartNr, siehe Ranking
+res.runner_stats(100) # StartNr, siehe Ranking/Durchlaufzeiten
 ```
 
 #### Ausgabe

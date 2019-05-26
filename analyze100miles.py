@@ -24,14 +24,14 @@ Stage = collections.namedtuple("Stage", [
             "time_total",
             ])
 
-YEAR_COURSE = { 2011 : "clockwise_2011",
-                2013 : "counterclockwise_2013",
-                2014 : "clockwise",
-                2015 : "counterclockwise",
-                2016 : "clockwise",
-                2017 : "counterclockwise",
-                2018 : "clockwise_new",
-                }
+YEAR_COURSE = {2011: "clockwise_2011",
+               2013: "counterclockwise_2013",
+               2014: "clockwise",
+               2015: "counterclockwise",
+               2016: "clockwise",
+               2017: "counterclockwise",
+               2018: "clockwise_new",
+               }
 
 VP_FILE = "vp_list.yaml"
 
@@ -52,7 +52,6 @@ class Results:
             data = self._read_csv(csv_file)
             self.results = self._runner_details(data, self.vp_index)
             self.ranking = self._get_ranking(self.results)
-
         else:
             print("Available options (int): {}".format(YEAR_COURSE.keys()))
 
@@ -161,28 +160,31 @@ Ranking
                                  ))
         return res
 
-    def vp_stats(self, vp, tag="all"):
-        print(self._get_vp_stats(vp, tag))
+    def vp_stats(self, vp, tag="all", list_runners=10):
+        print(self._get_vp_stats(vp, tag, list_runners))
 
-    def stats_to_file(self, tag="all"):
-        """creates list for all vps and dumps it into file"""
+    def stats_to_file(self, tag="all", list_runners=0):
+        """creates list for all vps and dumps it into file, all runners listed if list_runners not set"""
         data = "Durchlaufzeiten für das Jahr {}\n".format(self.year)
         for vp in self.vp_index:
-            data += self._get_vp_stats(vp, tag)
-        filename = "{}_{}.txt".format(self.year, tag)
+            data += self._get_vp_stats(vp, tag, list_runners)
+        filename = "{}_{}.txt".format(self.year, tag, list_runners)
         with open(filename, "w") as f:
             f.write(data)
 
-    def _get_vp_stats(self, vp, tag):
+    def _get_vp_stats(self, vp, tag, list_runners):
         """reads all runner results at a given vp and returns string with
            first 3/quartils times of passing the vp.
            
            Arguments:
                 vp: pass vp index as string, p.e. "VP1"..."Ziel"
-                cat: "all" (default): include single runners and relays
+                tag: "all" (default): include single runners and relays
                      "f": women's results only
                      "m": men's results only
                      "r": relay results only
+                list_runners: first number of runners to be listed
+                                - default is 10
+                                - use 0 to show all
         """
         pass_all = []
         pace = []
@@ -198,13 +200,13 @@ Ranking
                     raise KeyError
                 if tag == r.tag:
                     try:
-                        pass_all.append([pass_time, r.name])
+                        pass_all.append([pass_time, r.name, r.startnr])
                         pace.append((r.stages[vp].pace, r.name))
                     except KeyError:
                         pass
                 elif tag == "all":
                     try:
-                        pass_all.append([pass_time, r.name])
+                        pass_all.append([pass_time, r.name, r.startnr])
                         pace.append((r.stages[vp].pace, r.name))
                     except KeyError:
                         pass
@@ -215,25 +217,33 @@ Ranking
         for p in pass_all:
             p[0] = str(p[0]).replace("1 day", "Sonntag")
         pace = sorted(pace, key=self._sort_pace)
+
         returnstring = """
 {} - {} - km {}
 ************************************************************************
 Anzahl Läufer: {}
-1.:  {} Uhr ({})
-2.:  {} Uhr ({})
-3.:  {} Uhr ({})
-4.:  {} Uhr ({})
-5.:  {} Uhr ({})
-6.:  {} Uhr ({})
-7.:  {} Uhr ({})
-8.:  {} Uhr ({})
-9.:  {} Uhr ({})
-10.: {} Uhr ({})
 
-25 %:   {} Uhr
-50 %:   {} Uhr
-75 %:   {} Uhr
-100% :  {} Uhr ({})
+""".format(vp,
+           self.vp_list[vp]["name"],
+           self.vp_list[vp]["km_kum"],
+           len(pass_all),
+           )
+           
+        if list_runners == 0 or list_runners > len(pass_all):
+            list_runners = len(pass_all)
+        for i in range(list_runners):
+            returnstring += """{}.: {} Uhr - {} ({})
+""".format(i + 1,
+           pass_all[i][0],
+           pass_all[i][1],
+           pass_all[i][2],
+           )
+
+        returnstring += """
+25 %:  {} Uhr
+50 %:  {} Uhr
+75 %:  {} Uhr
+100 %: {} Uhr ({})
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Split pace in min/km
 
@@ -243,32 +253,17 @@ Split pace in min/km
 4.:  {} ({})
 5.:  {} ({})
 ************************************************************************
-""".format(vp,
-               self.vp_list[vp]["name"],
-               self.vp_list[vp]["km_kum"],
-               len(pass_all),
-               pass_all[0][0], pass_all[0][1],
-               pass_all[1][0], pass_all[1][1],
-               pass_all[2][0], pass_all[2][1],
-               pass_all[3][0], pass_all[3][1],
-               pass_all[4][0], pass_all[4][1],
-               pass_all[5][0], pass_all[5][1],
-               pass_all[6][0], pass_all[6][1],
-               pass_all[7][0], pass_all[7][1],
-               pass_all[8][0], pass_all[8][1],
-               pass_all[9][0], pass_all[9][1],
-
-               pass_all[int(len(pass_all) * .25)][0],
-               pass_all[int(len(pass_all) * .5)][0],
-               pass_all[int(len(pass_all) * .75)][0],
-               pass_all[-1][0], pass_all[-1][1],
-               
-               pace[0][0], pace[0][1],
-               pace[1][0], pace[1][1],
-               pace[2][0], pace[2][1],
-               pace[3][0], pace[3][1],
-               pace[4][0], pace[4][1],
-              )
+""".format(pass_all[int(len(pass_all) * .25)][0],
+           pass_all[int(len(pass_all) * .5)][0],
+           pass_all[int(len(pass_all) * .75)][0],
+           pass_all[-1][0], pass_all[-1][1],
+           
+           pace[0][0], pace[0][1],
+           pace[1][0], pace[1][1],
+           pace[2][0], pace[2][1],
+           pace[3][0], pace[3][1],
+           pace[4][0], pace[4][1],
+           )
         return returnstring
 
     def runner_stats(self, nr):
