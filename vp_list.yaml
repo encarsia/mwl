@@ -123,39 +123,39 @@ clockwise_new:
     km_kum: 13,4
   VP3:
     name: Dammweg
-    km: 5,8
-    km_kum: 19,2
+    km: 5,9
+    km_kum: 19,3
   VP4:
     name: Johannisthaler Chaussee
     km: 5,7
-    km_kum: 24,9
+    km_kum: 25,0
   VP5:
     name: Imbiss "Am Ziel"/Dörferblick
-    km: 9,5
-    km_kum: 34,4
+    km: 6,4
+    km_kum: 31,4
   VP6:
     name: Buckow
-    km: 4,5
-    km_kum: 38,9
+    km: 7,6
+    km_kum: 39,0
   VP7:
     name: Ninas Eltern
-    km: 7,6
+    km: 7,5
     km_kum: 46,5
   VP8:
     name: Osdorfer Straße
-    km: 6,3
-    km_kum: 52,8
+    km: 6,2
+    km_kum: 52,7
   VP9:
-    name: Sportplatz Teltow
+    name: WP1 Sportplatz Teltow
     km: 6,5
-    km_kum: 59,3
+    km_kum: 59,2
   VP10:
     name: Königsweg
     km: 6,2
-    km_kum: 65,5
+    km_kum: 65,4
   VP11:
     name: Gedenkstätte Griebnitzsee
-    km: 6,8
+    km: 6,9
     km_kum: 72,3
   VP12:
     name: Brauhaus Meierei
@@ -166,20 +166,20 @@ clockwise_new:
     km: 5,7
     km_kum: 84,9
   VP14:
-    name: Schloss Sacrow
-    km: 6,3
-    km_kum: 91,2
+    name: WP2 Schloss Sacrow
+    km: 6,2
+    km_kum: 91,1
   VP15:
     name: Pagel & Friends
     km: 7,6
-    km_kum: 98,8
+    km_kum: 98,7
   VP16:
     name: Karolinenhöhe
     km: 4,9
-    km_kum: 103,7
+    km_kum: 103,6
   VP17:
     name: Falkenseer Chaussee
-    km: 6,5
+    km: 6,6
     km_kum: 110,2
   VP18:
     name: Schönwalde
@@ -187,40 +187,40 @@ clockwise_new:
     km_kum:  116,0
   VP19:
     name: Grenzturm Nieder Neuendorf
-    km: 7,3
-    km_kum: 123,3
+    km: 7,6
+    km_kum: 123,6
   VP20:
-    name: Ruderclub Oberhavel
-    km: 4,8
-    km_kum: 128,1
+    name: WP3 Ruderclub Oberhavel
+    km: 4,7
+    km_kum: 128,3
   VP21:
     name: Frohnau
-    km: 4,1
-    km_kum: 132,2
+    km: 5,0
+    km_kum: 133,3
   VP22:
     name: Naturschutzturm
-    km: 6,4
-    km_kum: 138,6
+    km: 5,5
+    km_kum: 138,8
   VP23:
     name: Oranienburger Chaussee
-    km: 4,5
-    km_kum: 143,1
+    km: 4,6
+    km_kum: 143,4
   VP24:
     name: Lauftreff Lübars
     km: 5,3
-    km_kum: 148,4
+    km_kum: 148,7
   VP25:
     name: Wilhelmsruh
     km: 5,7
-    km_kum: 154,1
+    km_kum: 154,4
   VP26:
     name: Wollankstrasse
-    km: 3,1
-    km_kum: 157,2
+    km: 3,0
+    km_kum: 157,4
   Ziel:
     name: Friedrich-Ludwig-Jahn-Sportpark
-    km: 4,2
-    km_kum: 161,9
+    km: 3,9
+    km_kum: 161,3
 
 clockwise_2011:
   VP1:

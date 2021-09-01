@@ -10,11 +10,13 @@ Runner = collections.namedtuple("Runner", [
             "rank",
             "startnr",
             "name",
+            "nation",
             "cat",
             "tag",
             "starttime",
             "time",
             "pace",
+            "lag",
             "stages",
             ])
 
@@ -22,6 +24,7 @@ Stage = collections.namedtuple("Stage", [
             "time",
             "pace",
             "time_total",
+            "note",
             ])
 
 YEAR_COURSE = {2011: "clockwise_2011",
@@ -31,12 +34,15 @@ YEAR_COURSE = {2011: "clockwise_2011",
                2016: "clockwise",
                2017: "counterclockwise",
                2018: "clockwise_new",
+               2021: "clockwise_new",
                }
 
 VP_FILE = "vp_list.yaml"
 
 RULE = "---------------------------------------------------------------------------------\n"
 
+
+# print(f"Daten verfügbar für {list(YEAR_COURSE)}.")
 
 class Results:
     
@@ -48,9 +54,12 @@ class Results:
             self.course_info = self._get_course(self.vp_list)
             self.vp_index = list(self.vp_list.keys())
             
-            csv_file = "SI_results/result_course_{}.csv".format(self.year)
+            csv_file = "results/result_course_{}.csv".format(self.year)
             data = self._read_csv(csv_file)
-            self.results = self._runner_details(data, self.vp_index)
+            if self.year > 2018:
+                self.results = self._runner_details_RR(data, self.vp_index)
+            else:
+                self.results = self._runner_details_SI(data, self.vp_index)
             self.ranking = self._get_ranking(self.results)
         else:
             print("Available options (int): {}".format(YEAR_COURSE.keys()))
@@ -58,7 +67,7 @@ class Results:
     def _read_vplist(self, filename, year):
         """read yaml file and returns data as dict"""
         with open(filename) as f:
-            vp_list = yaml.load(f)
+            vp_list = yaml.safe_load(f)
         vp_list = vp_list[YEAR_COURSE[year]]
         return vp_list
 
@@ -86,12 +95,13 @@ Verpflegungspunkte/Zeitmessung
         returnstring += RULE
         return returnstring
 
+    # TODO split categories
     def _get_ranking(self, results):
         returnstring = ("""
 Ranking
 ~~~~~~~
 """)
-        row = "{:<5} {:<7} {:<40} {:<10} {}\n"
+        row = "{:<6} {:<7} {:<40} {:<10} {}\n"
         returnstring += row.format("Platz", "StartNr", "Name", "Zeit", "Kategorie")
         returnstring += RULE
         for r in results:
@@ -111,7 +121,7 @@ Ranking
         except ValueError:
             return
 
-    def _runner_details(self, data, vp_index):
+    def _runner_details_RR(self, data, vp_index):
         """reads data list and returns list of namedtuples with list of
            runner details and stage times"""
         res = []
@@ -120,6 +130,113 @@ Ranking
                 stage_time = []
                 stage_pace = []
                 stage_total = []
+                stage_note = []
+                total = datetime.timedelta()
+                for t in d[13:91:3]:
+                    try:
+                        if len(t.split(":")) < 2:
+                            stage_note.append("(Messung fehlt/fehlerhaft)")
+                            stage_time.append("")
+                        elif len(t.split(":")) == 2:
+                            m, s = t.split(":")
+                            stage_time.append(t)
+                            stage_note.append("")
+                            delta = datetime.timedelta(hours=0, minutes=int(m), seconds=int(s))
+                            total += delta
+                        elif len(t.split(":")) == 3:
+                            h, m, s = t.split(":")
+                            stage_time.append(t)
+                            stage_note.append("")
+                            delta = datetime.timedelta(hours=int(h), minutes=int(m), seconds=int(s))
+                            total += delta
+                    except ValueError:
+                        # total = t
+                        break
+                    stage_total.append(total)
+                
+                # Ziel is total time not split time so calculate it
+                try:
+                    h, m, s = d[-2].split(":")
+                    _stagetime = datetime.timedelta(hours=int(h), minutes=int(m), seconds=int(s)) - total
+                    if int(_stagetime.total_seconds() / 3600) > 0:
+                        _stagestr = "{}:{:>02}:{:>02}".format(int(_stagetime.total_seconds() // 3600),
+                                                              int(_stagetime.total_seconds() % 3600 // 60),
+                                                              int(_stagetime.total_seconds() % 60),
+                                                              )
+                    else:
+                        _stagestr = "{:>02}:{:>02}".format(int(_stagetime.total_seconds() % 3600 // 60),
+                                                           int(_stagetime.total_seconds() % 60),
+                                                              )
+                    stage_time.append(_stagestr)
+                    total += _stagetime
+                    stage_note.append("")
+                    stage_total.append(total)
+                except ValueError:
+                    stage_note.append("(Messung fehlt/fehlerhaft)")
+                    stage_time.append("")
+                    stage_total.append(total)
+                
+                # pace is overall pace, TODO calculate split pace
+                for p in d[14:96:3]:
+                    stage_pace.append(p)
+                
+                stages = dict()
+                for i, t, p, tot, n in zip(vp_index, stage_time, stage_pace, stage_total, stage_note):
+                    stages[i] = Stage(t, p, tot, n)
+                
+                _name = d[2]
+
+                if d[6] == "m":
+                    tag = "m"
+                    starttime = datetime.timedelta(hours=6)
+                    cat = d[2].split("(")[1][:-1] # in brackets in name column
+                    _name = d[2].split("(")[0][:-1]
+                elif d[6] == "w":
+                    tag = "f"
+                    # TODO starttime in course info
+                    starttime = datetime.timedelta(hours=6)
+                    cat = d[2].split("(")[1][:-1] # in brackets in name column
+                    _name = d[2].split("(")[0][:-1]
+                elif d[5] == "2er":
+                    tag = "r2"
+                    starttime = datetime.timedelta(hours=7)
+                    cat = "2er-Staffel"
+                elif d[5] == "4er":
+                    tag = "r4"
+                    starttime = datetime.timedelta(hours=7, minutes=30)
+                    cat = "4er-Staffel"
+                elif d[5] == "10+":
+                    tag = "r10"
+                    starttime = datetime.timedelta(hours=8)
+                    cat = "10plus-Staffel"
+                else:
+                    tag = "invalid"
+                    cat = "invalid"
+
+                res.append(Runner(d[0],         # rank
+                                  int(d[1]),    # startnr
+                                  _name,        # name
+                                  d[3],         # nationality
+                                  cat,          # category
+                                  tag,          # single/relay
+                                  starttime, 
+                                  d[9],         # overall time
+                                  d[10],        # overall pace
+                                  d[11],        # lag
+                                  stages,
+                                 ))
+        return res
+
+    def _runner_details_SI(self, data, vp_index):
+        """reads data list and returns list of namedtuples with list of
+           runner details and stage times"""
+        res = []
+        for d in data:
+            if d[1] != "StartNr": # ignore table headers
+                stage_time = []
+                stage_pace = []
+                stage_total = []
+                stage_note = []
                 total = datetime.timedelta()
                 for t in d[15:97:3]:
                     stage_time.append(t)
@@ -133,10 +250,11 @@ Ranking
                     stage_total.append(total)
                 for p in d[16:98:3]:
                     stage_pace.append(p.split(" min/km")[0])
+                    stage_note.append("")   # dummy note so print table doesn't break
                 
                 stages = dict()
-                for i, t, p, tot in zip(vp_index, stage_time, stage_pace, stage_total):
-                    stages[i] = Stage(t, p, tot)
+                for i, t, p, tot, n in zip(vp_index, stage_time, stage_pace, stage_total, stage_note):
+                    stages[i] = Stage(t, p, tot, n)
 
                 if d[8].startswith("Senioren") or d[8].startswith("Männer"):
                     tag = "m"
@@ -151,14 +269,17 @@ Ranking
                 res.append(Runner(d[0],
                                   int(d[1]),
                                   d[3],
+                                  d[4],
                                   d[8],
                                   tag,
                                   starttime,
                                   d[11],
                                   d[12],
+                                  d[13],
                                   stages,
                                  ))
         return res
+
 
     def vp_stats(self, vp, tag="all", list_runners=10):
         print(self._get_vp_stats(vp, tag, list_runners))
@@ -173,6 +294,7 @@ Ranking
             f.write(data)
 
     def _get_vp_stats(self, vp, tag, list_runners):
+        
         """reads all runner results at a given vp and returns string with
            first 3/quartils times of passing the vp.
            
@@ -181,7 +303,10 @@ Ranking
                 tag: "all" (default): include single runners and relays
                      "f": women's results only
                      "m": men's results only
-                     "r": relay results only
+                     "r": relay results only (for years up to 2018)
+                     "r2": 2-person relay
+                     "r4": 4-person relay
+                     "r10": 10plus-person relay
                 list_runners: first number of runners to be listed
                                 - default is 10
                                 - use 0 to show all
@@ -200,14 +325,16 @@ Ranking
                     raise KeyError
                 if tag == r.tag:
                     try:
-                        pass_all.append([pass_time, r.name, r.startnr])
-                        pace.append((r.stages[vp].pace, r.name))
+                        if not r.stages[vp].note == "(Messung fehlt/fehlerhaft)":
+                            pass_all.append([pass_time, r.name, r.startnr])
+                            pace.append((r.stages[vp].pace, r.name))
                     except KeyError:
                         pass
                 elif tag == "all":
                     try:
-                        pass_all.append([pass_time, r.name, r.startnr])
-                        pace.append((r.stages[vp].pace, r.name))
+                        if not r.stages[vp].note == "(Messung fehlt/fehlerhaft)":
+                            pass_all.append([pass_time, r.name, r.startnr])
+                            pace.append((r.stages[vp].pace, r.name))
                     except KeyError:
                         pass
             except KeyError:
@@ -221,7 +348,7 @@ Ranking
         returnstring = """
 {} - {} - km {}
 ************************************************************************
-Anzahl Läufer: {}
+Anzahl Läufer/Staffeln: {}
 
 """.format(vp,
            self.vp_list[vp]["name"],
@@ -272,19 +399,22 @@ Split pace in min/km
                 print("""
 Name: {} - Platz: {}
 StartNr: {} - Kategorie: {}
-Zeit: {} - Pace: {}
+Zeit: {} - Pace: {} - Rückstand: {}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~""".format(r.name,
-                                                              r.rank,
-                                                              nr,
-                                                              r.cat,
-                                                              r.time,
-                                                              r.pace
-                                                              ))
-                row = "{:<5} {:<10} {:<10} {}"
+                                                                r.rank,
+                                                                nr,
+                                                                r.cat,
+                                                                r.time,
+                                                                r.pace,
+                                                                r.lag,
+                                                                )
+                        )
+                row = "{:<6} {:<10} {:<10} {:<10} {}"
                 print(row.format("VP",
                                   "Split time",
                                   "Split pace",
                                   "Time (total)",
+                                  "",
                                   ))
                 for stage in r.stages:
                     t = r.stages[stage].time_total.total_seconds()
@@ -292,8 +422,10 @@ Zeit: {} - Pace: {}
                                                    int(t % 3600 // 60),
                                                    int(t % 60,))
                     print(row.format(stage,
-                                      r.stages[stage].time,
-                                      r.stages[stage].pace,
-                                      time_total,
-                                      ))
+                                     r.stages[stage].time,
+                                     r.stages[stage].pace,
+                                     time_total,
+                                     r.stages[stage].note,
+                                     )
+                          )
                 break
