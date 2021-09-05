@@ -304,15 +304,6 @@ Ranking
     def vp_stats(self, vp, tag="all", list_runners=10):
         print(self._get_vp_stats(vp, tag, list_runners))
 
-    def stats_to_file(self, tag="all", list_runners=0):
-        """creates list for all vps and dumps it into file, all runners listed if list_runners not set"""
-        data = "Durchlaufzeiten für das Jahr {}\n".format(self.year)
-        for vp in self.vp_index:
-            data += self._get_vp_stats(vp, tag, list_runners)
-        filename = "{}_{}.txt".format(self.year, tag, list_runners)
-        with open(filename, "w") as f:
-            f.write(data)
-
     def _get_vp_stats(self, vp, tag, list_runners):
         
         """reads all runner results at a given vp and returns string with

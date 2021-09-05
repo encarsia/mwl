@@ -103,23 +103,6 @@ Split pace in min/km
 ************************************************************************
 ```
 
-### Alle Durchlaufzeiten als Textdatei ausgeben
-
-```python
-res.stats_to_file()
-
-# Filtern nach Frauen/Männern/Staffeln
-res.stats_to_file("f") 
-res.stats_to_file("m") 
-res.stats_to_file("r")
-
-# Wie zuvor, Anzeige der ersten n Läufer (default 0 für alle)
-res.stats_to_filevp_stats("VP5", "f", 10) # listet jeweils die ersten 10
-res.stats_to_filevp_stats("VP5", "m", 10)
-res.stats_to_filevp_stats("VP5", "r", 10)
-res.stats_to_filevp_stats("VP5", "all", 10)
-```
-
 ### Ranking
 
 ```python
