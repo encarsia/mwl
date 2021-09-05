@@ -42,8 +42,6 @@ VP_FILE = "vp_list.yaml"
 RULE = "---------------------------------------------------------------------------------\n"
 
 
-# print(f"Daten verfügbar für {list(YEAR_COURSE)}.")
-
 class Results:
     
     def __init__(self, year):
@@ -190,7 +188,7 @@ Ranking
                     tag = "m"
                     starttime = datetime.timedelta(hours=6)
                     cat = d[2].split("(")[1][:-1] # in brackets in name column
-                    _name = d[2].split("(")[0][:-1]
+                    _name = d[2].split("(")[0][:-1] # cut category after name
                 elif d[6] == "w":
                     tag = "f"
                     # TODO starttime in course info
@@ -210,6 +208,7 @@ Ranking
                     starttime = datetime.timedelta(hours=8)
                     cat = "10plus-Staffel"
                 else:
+                    # shouldn't happen but will nonetheless
                     tag = "invalid"
                     cat = "invalid"
 
@@ -256,6 +255,13 @@ Ranking
                 for i, t, p, tot, n in zip(vp_index, stage_time, stage_pace, stage_total, stage_note):
                     stages[i] = Stage(t, p, tot, n)
 
+                _name = d[3]
+                # team name is encoded in club column in 2017
+                if _name.startswith("Team,"):
+                    _name = d[5]
+
+                cat = d[8]
+                
                 if d[8].startswith("Senioren") or d[8].startswith("Männer"):
                     tag = "m"
                     starttime = datetime.timedelta(hours=6)
@@ -263,14 +269,29 @@ Ranking
                     tag = "f"
                     starttime = datetime.timedelta(hours=6)
                 else:
-                    tag = "r"
+                    # relay information is set in different columns over the years
+                    if d[8].startswith("2er")or d[8].startswith("Staffel 2x") or d[7].startswith("2er"):
+                        tag = "r2"
+                        cat = "2er-Staffel"
+                    elif d[8].startswith("4er") or d[8].startswith("Staffel 4x") or d[7].startswith("4er"):
+                        tag = "r4"
+                        cat = "4er-Staffel"
+                    elif d[8].startswith("10Plus") or d[7].startswith("10+"):
+                        tag = "r10"
+                        cat = "10plus-Staffel"#
+                    elif d[8].startswith("Gesamt"):
+                        tag = "all"
+                        cat = "keine Information"
+                    else:
+                        tag = "invalid"
+                        cat = "invalid"
                     starttime = datetime.timedelta(hours=7)
                     
                 res.append(Runner(d[0],
                                   int(d[1]),
-                                  d[3],
+                                  _name,
                                   d[4],
-                                  d[8],
+                                  cat,
                                   tag,
                                   starttime,
                                   d[11],
@@ -279,7 +300,6 @@ Ranking
                                   stages,
                                  ))
         return res
-
 
     def vp_stats(self, vp, tag="all", list_runners=10):
         print(self._get_vp_stats(vp, tag, list_runners))
@@ -397,10 +417,11 @@ Split pace in min/km
         for r in self.results:
             if r.startnr == nr:
                 print("""
-Name: {} - Platz: {}
+Name: {} ({}) - Platz: {}
 StartNr: {} - Kategorie: {}
 Zeit: {} - Pace: {} - Rückstand: {}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~""".format(r.name,
+                                                                r.nation,
                                                                 r.rank,
                                                                 nr,
                                                                 r.cat,
