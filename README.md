@@ -12,7 +12,7 @@
 
 * die Daten wurden von [SPORTident](https://www.sportident.com/) erfasst und sind als csv-Dateien verfügbar (oben rechts unter "Downloads" auf der jeweiligen Veranstaltungsseite)
 * die von der SPORTident-Webseite heruntergeladenen csv-Dateien sind nicht UTF-8-kodiert
-* die Ergebnislisten bis 2018 befinden sich im Ordner ``SI_results``
+* die Ergebnislisten befinden sich im Ordner ``results``
 
 ## Benutzung
 
@@ -53,11 +53,17 @@ Ziel  3,96      161,9     Friedrich-Ludwig-Jahn-Sportpark
 res.vp_stats("VP5")
 
 # Filtern nach Frauen/Männern/Staffeln
+# 2011: nur ein Gesamtclassement und keine Staffeln
+# 2013: keine 10plus-Staffeln
+
 res.vp_stats("VP5", "f") 
 res.vp_stats("VP5", "m") 
-res.vp_stats("VP5", "r")
+res.vp_stats("VP5", "r2")
+res.vp_stats("VP5", "r4")
+res.vp_stats("VP5", "r10")
 
 # Wie zuvor, Anzeige der ersten n Läufer (default 10, 0 für alle)
+
 res.vp_stats("VP5", "f", 3) # listet die ersten 3 Männer 
 res.vp_stats("VP5", "m", 20) # listet die ersten 20 Frauen
 res.vp_stats("VP5", "r", 0) # listet alle Staffeln
@@ -158,10 +164,10 @@ VP27  00:30:12   9:46       27:40:31
 Ziel  00:43:27   11:33      28:23:58
 ```
 
-## Übertragbarkeit auf andere Veranstaltungen
+## Übertragbarkeit auf andere mit SPORTident erfasste Veranstaltungen
 
 * **ungetestet**
 * da die csv-Dateien immer den gleichen Aufbau haben, sollte sich das Skript auch leicht an andere Veranstaltungen anpassen lassen:
   * ``vp_list.yaml``: Details der Messstationen anpassen/erstellen
   * ``analyze100miles.py``: Dictionary ``YEAR_COURSE`` entsprechend anpassen
-  * csv-Datei(en) in ``/SI_results`` speichern
+  * csv-Datei(en) in ``/results`` speichern
