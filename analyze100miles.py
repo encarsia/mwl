@@ -34,12 +34,13 @@ TAGS = {"f": "Frauen",
 
 VP_FILE = "vp_list.yaml"
 
-RULE = "---------------------------------------------------------------------------------\n"
+RULE = "--------------------------------------------------------------------" \
+       "-------------\n"
 
 
 class Results:
     
-    def __init__(self, year=0): # avoid missing positional argument TypeError
+    def __init__(self, year=0):  # avoid missing positional argument TypeError
         
         if year in YEAR_COURSE.keys():
             self.year = year
@@ -50,13 +51,12 @@ class Results:
             csv_file = "results/result_course_{}.csv".format(self.year)
             data = self._read_csv(csv_file)
             if self.year > 2018:
-                self.results = self._runner_details_RR(data, self.vp_index)
+                self.results = self._runner_details_rr(data, self.vp_index)
             else:
-                self.results = self._runner_details_SI(data, self.vp_index)
+                self.results = self._runner_details_si(data, self.vp_index)
             self.results, self.rankings = self._get_rankings(self.results)
         else:
             print("Optionen (int): {}".format(YEAR_COURSE.keys()))
-
 
     def _read_vplist(self, filename, year):
         
@@ -67,7 +67,6 @@ class Results:
         vp_list = vp_list[YEAR_COURSE[year]]
         return vp_list
 
-
     def _read_csv(self, filename):
         
         """returns results from SportIdent csv file as list"""
@@ -76,7 +75,6 @@ class Results:
             reader = csv.reader(f, delimiter=";")
             data = list(reader)
         return data
-
 
     def _get_course(self, vp_list):
         
@@ -89,13 +87,12 @@ Verpflegungspunkte/Zeitmessung
         returnstring += RULE
         for vp in vp_list:
             returnstring += row.format(vp,
-                              vp_list[vp]["km"],
-                              vp_list[vp]["km_kum"],
-                              vp_list[vp]["name"],
-                              )
+                                       vp_list[vp]["km"],
+                                       vp_list[vp]["km_kum"],
+                                       vp_list[vp]["name"],
+                                       )
         returnstring += RULE
         return returnstring
-
 
     def _get_rankings(self, results):
         
@@ -106,29 +103,35 @@ Verpflegungspunkte/Zeitmessung
         ranking = {"m": {"FIN": [],
                          "DNF": [],
                          "DSQ": [],
-                         "DNS": [],}, # 2017
+                         "DNS": [],  # 2017
+                         },
                    "f": {"FIN": [],
                          "DNF": [],
                          "DSQ": [],
-                         "DNS": [],}, # 2017
+                         "DNS": [],  # 2017
+                         },
                    "r2": {"FIN": [],
                           "DNF": [],
                           "DSQ": [],
-                          "DNS": [],}, # 2017
+                          "DNS": [],  # 2017
+                          },
                    "r4": {"FIN": [],
                           "DNF": [],
                           "DSQ": [],
-                          "DNS": [],}, # 2017
+                          "DNS": [],  # 2017
+                          },
                    "r10": {"FIN": [],
                            "DNF": [],
                            "DSQ": [],
-                           "DNS": [],}, # 2017
+                           "DNS": [],  # 2017
+                           },
                    # for 2011 results only
                    "all": {"FIN": [],
                            "DNF": [],
                            "DSQ": [],
-                           "DNS": [],}, # 2017}
-                    }
+                           "DNS": [],  # 2017
+                           },
+                   }
 
         for startnr, r in results.items():
             if "DNF" in r.rank:
@@ -141,16 +144,19 @@ Verpflegungspunkte/Zeitmessung
                 # ordered list of finishers
                 ranking[r.tag]["FIN"].append(startnr)
 
-        # add total numbers of starters for later use in vp_stats and ranking table
-        # don't count DNS
+        # add total numbers of starters for later use in vp_stats and ranking
+        # table, don't count DNS
         _overall_total = 0
         for _ in ranking.keys():
-            _total = len(ranking[_]["FIN"]) + len(ranking[_]["DSQ"]) + len(ranking[_]["DNF"])
+            _total = (len(ranking[_]["FIN"])
+                      + len(ranking[_]["DSQ"])
+                      + len(ranking[_]["DNF"]))
             _overall_total += _total
             ranking[_]["total"] = _total
         ranking["total"] = _overall_total
 
-        # overwrite rank value from csv table (consecutive order of finishing) with real rank
+        # overwrite rank value from csv table (consecutive order of finishing)
+        # with real rank
         for tag in TAGS.keys():
             for _rank, startnr in enumerate(ranking[tag]["FIN"], 1):
                 results[startnr].rank = _rank
@@ -160,8 +166,7 @@ Verpflegungspunkte/Zeitmessung
 
         return results, ranking
 
-
-    def ranking(self, tag="all"): # avoid missing positional argument TypeError
+    def ranking(self, tag="all"):  # avoid missing positional arg TypeError
 
         """ranking table by category
            
@@ -185,9 +190,9 @@ Verpflegungspunkte/Zeitmessung
         stats = (len(ranking_list["FIN"]),
                  len(ranking_list["DNF"]),
                  len(ranking_list["DSQ"]),
-                 len(ranking_list["DNS"]), # only in 2017
+                 len(ranking_list["DNS"]),  # only in 2017
                  ranking_list["total"],
-                )
+                 )
 
         returnstring = """
 ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -210,7 +215,12 @@ Total:    {}
 
         returnstring += RULE
         row = "{:<6} {:<7} {:<40} {:<10} {}\n"
-        returnstring += row.format("Platz", "StartNr", "Name", "Zeit", "Kategorie")
+        returnstring += row.format("Platz",
+                                   "StartNr",
+                                   "Name",
+                                   "Zeit",
+                                   "Kategorie"
+                                   )
         returnstring += RULE
         
         for _ in ("FIN", "DNF", "DSQ", "DNS"):
@@ -220,12 +230,11 @@ Total:    {}
                                            self.results[startnr].name,
                                            self.results[startnr].time,
                                            self.results[startnr].cat,
-                                    )
-            if len(ranking_list[_]) > 0: # avoid unnecessary rules
+                                           )
+            if len(ranking_list[_]) > 0:  # avoid unnecessary rules
                 returnstring += RULE
         
         print(returnstring)
-
 
     def _sort_pace(self, pace):
         
@@ -235,8 +244,7 @@ Total:    {}
         except ValueError:
             return
 
-
-    def _runner_details_RR(self, data, vp_index):
+    def _runner_details_rr(self, data, vp_index):
         
         """reads data list and returns dict of namedtuples with runner
            details and stage times
@@ -247,7 +255,7 @@ Total:    {}
         res = dict()
         
         for d in data:
-            if d[1] != "StartNr": # ignore table headers
+            if d[1] != "StartNr":  # ignore table headers
                 stage_time = []
                 stage_pace = []
                 stage_total = []
@@ -261,14 +269,20 @@ Total:    {}
                         m, s = t.split(":")
                         stage_time.append(t)
                         stage_note.append("")
-                        delta = datetime.timedelta(hours=0, minutes=int(m), seconds=int(s))
+                        delta = datetime.timedelta(hours=0,
+                                                   minutes=int(m),
+                                                   seconds=int(s),
+                                                   )
                         total += delta
                     # measurements below 60 minutes are mm:ss, above h:mm:ss
                     elif len(t.split(":")) == 3:
                         h, m, s = t.split(":")
                         stage_time.append(t)
                         stage_note.append("")
-                        delta = datetime.timedelta(hours=int(h), minutes=int(m), seconds=int(s))
+                        delta = datetime.timedelta(hours=int(h),
+                                                   minutes=int(m),
+                                                   seconds=int(s),
+                                                   )
                         total += delta
 
                     stage_total.append(total)
@@ -276,15 +290,20 @@ Total:    {}
                 # "Ziel" is total time not split time so calculate it
                 try:
                     h, m, s = d[-2].split(":")
-                    _stagetime = datetime.timedelta(hours=int(h), minutes=int(m), seconds=int(s)) - total
+                    _stagetime = datetime.timedelta(hours=int(h),
+                                                    minutes=int(m),
+                                                    seconds=int(s),
+                                                    ) - total
                     if int(_stagetime.total_seconds() / 3600) > 0:
-                        _stagestr = "{}:{:>02}:{:>02}".format(int(_stagetime.total_seconds() // 3600),
-                                                              int(_stagetime.total_seconds() % 3600 // 60),
-                                                              int(_stagetime.total_seconds() % 60),
+                        _stagestr = "{}:{:>02}:{:>02}".format(
+                            int(_stagetime.total_seconds() // 3600),
+                            int(_stagetime.total_seconds() % 3600 // 60),
+                            int(_stagetime.total_seconds() % 60),
                                                               )
                     else:
-                        _stagestr = "{:>02}:{:>02}".format(int(_stagetime.total_seconds() % 3600 // 60),
-                                                           int(_stagetime.total_seconds() % 60),
+                        _stagestr = "{:>02}:{:>02}".format(
+                            int(_stagetime.total_seconds() % 3600 // 60),
+                            int(_stagetime.total_seconds() % 60),
                                                               )
                     stage_time.append(_stagestr)
                     total += _stagetime
@@ -300,7 +319,8 @@ Total:    {}
                     stage_pace.append(p)
                 
                 stages = dict()
-                for i, t, p, tot, n in zip(vp_index, stage_time, stage_pace, stage_total, stage_note):
+                for i, t, p, tot, n in zip(vp_index, stage_time, stage_pace,
+                                           stage_total, stage_note):
                     stages[i] = Stage(t, p, tot, n)
                 
                 _name = d[2]
@@ -308,13 +328,13 @@ Total:    {}
                 if d[6] == "m":
                     tag = "m"
                     starttime = datetime.timedelta(hours=6)
-                    cat = d[2].split("(")[1][:-1] # in brackets in name column
-                    _name = d[2].split("(")[0][:-1] # cut category after name
+                    cat = d[2].split("(")[1][:-1]  # in brackets in name column
+                    _name = d[2].split("(")[0][:-1]  # cut category after name
                 elif d[6] == "w":
                     tag = "f"
                     # TODO starttime in course info
                     starttime = datetime.timedelta(hours=6)
-                    cat = d[2].split("(")[1][:-1] # in brackets in name column
+                    cat = d[2].split("(")[1][:-1]  # in brackets in name column
                     _name = d[2].split("(")[0][:-1]
                 elif d[5] == "2er":
                     tag = "r2"
@@ -340,7 +360,7 @@ Total:    {}
                     "cat": cat,
                     "tag": tag,
                     "starttime": starttime,
-                    "time": d[9], # TODO calculate overall time
+                    "time": d[9],  # TODO calculate overall time
                     "pace": d[10],
                     "lag": d[11],
                     "stages": stages,
@@ -353,18 +373,17 @@ Total:    {}
             
         return res
 
-
-    def _runner_details_SI(self, data, vp_index):
+    def _runner_details_si(self, data, vp_index):
         
-        """reads data list and returns list of namedtuples with runner details and stage times
-           processes SportIdent data (-2018)
+        """reads data list and returns list of namedtuples with runner details
+           and stage times, processes SportIdent data (-2018)
         """
         
         # results as dict of "startnr: namedtuple" items
         res = dict()
         
         for d in data:
-            if d[1] != "StartNr": # ignore table headers
+            if d[1] != "StartNr":  # ignore table headers
                 stage_time = []
                 stage_pace = []
                 stage_total = []
@@ -373,8 +392,12 @@ Total:    {}
                 for t in d[15:97:3]:
                     try:
                         h, m, s = t.split(":")
-                        delta = datetime.timedelta(hours=int(h), minutes=int(m), seconds=int(s))
-                        stage_note.append("")   # dummy note so print table doesn't break
+                        delta = datetime.timedelta(hours=int(h),
+                                                   minutes=int(m),
+                                                   seconds=int(s),
+                                                   )
+                        # dummy note so print table doesn't break
+                        stage_note.append("")
                         stage_time.append(t)
                         total += delta
                     except ValueError:
@@ -388,7 +411,8 @@ Total:    {}
                         stage_pace.append(p.split(" min/km")[0])
                 
                 stages = dict()
-                for i, t, p, tot, n in zip(vp_index, stage_time, stage_pace, stage_total, stage_note):
+                for i, t, p, tot, n in zip(vp_index, stage_time, stage_pace,
+                                           stage_total, stage_note):
                     stages[i] = Stage(t, p, tot, n)
 
                 _name = d[3]
@@ -401,21 +425,28 @@ Total:    {}
                 if d[8].startswith("Senioren") or d[8].startswith("Männer"):
                     tag = "m"
                     starttime = datetime.timedelta(hours=6)
-                elif d[8].startswith("Seniorinnen") or d[8].startswith("Frauen"):
+                elif d[8].startswith("Seniorin") or d[8].startswith("Frau"):
                     tag = "f"
                     starttime = datetime.timedelta(hours=6)
                 else:
-                    # relay information is set in different columns over the years
-                    if d[8].startswith("2er")or d[8].startswith("Staffel 2x") or d[7].startswith("2er"):
+                    # relay information is set in different columns over the
+                    # years
+                    if d[8].startswith("2er")\
+                            or d[8].startswith("Staffel 2x")\
+                            or d[7].startswith("2er"):
                         tag = "r2"
                         cat = TAGS[tag]
-                    elif d[8].startswith("4er") or d[8].startswith("Staffel 4x") or d[7].startswith("4er"):
+                    elif d[8].startswith("4er")\
+                            or d[8].startswith("Staffel 4x") \
+                            or d[7].startswith("4er"):
                         tag = "r4"
                         cat = TAGS[tag]
-                    elif d[8].startswith("10Plus") or d[8].startswith("10er") or d[7].startswith("10+"):
+                    elif d[8].startswith("10Plus")\
+                            or d[8].startswith("10er")\
+                            or d[7].startswith("10+"):
                         tag = "r10"
                         cat = TAGS[tag]
-                    elif d[8].startswith("Gesamt"): # 2011
+                    elif d[8].startswith("Gesamt"):  # 2011
                         tag = "all"
                         cat = "keine Information"
                     else:
@@ -443,11 +474,11 @@ Total:    {}
 
         return res
 
-
     def vp_stats(self, vp, tag="all", list_runners=10):
         
-        """reads all runner results at a given vp (refreshing point = time measurement) and returns string with
-           first 3/quartils times of passing the vp.
+        """reads all runner results at a given vp (refreshing point = time
+           measurement) and returns string with first 3/quartils times of
+           passing the vp.
            
            Arguments:
                 vp: pass vp index as string, p.e. "VP1"..."Ziel"
@@ -476,14 +507,16 @@ Total:    {}
                     raise KeyError
                 if tag == r.tag:
                     try:
-                        if not r.stages[vp].note == "(Messung fehlt/fehlerhaft)":
+                        if not r.stages[vp].note == \
+                               "(Messung fehlt/fehlerhaft)":
                             pass_all.append([pass_time, r.name, startnr])
                             pace.append((r.stages[vp].pace, r.name, startnr))
                     except KeyError:
                         pass
                 elif tag == "all":
                     try:
-                        if not r.stages[vp].note == "(Messung fehlt/fehlerhaft)":
+                        if not r.stages[vp].note == \
+                               "(Messung fehlt/fehlerhaft)":
                             pass_all.append([pass_time, r.name, startnr])
                             pace.append((r.stages[vp].pace, r.name, startnr))
                     except KeyError:
@@ -552,7 +585,6 @@ Split pace in min/km
            
         print(returnstring)
 
-
     def runner_stats(self, nr):
         
         """print result table for given startnr"""
@@ -571,19 +603,20 @@ Zeit: {} - Pace: {} - Rückstand: {}
                                                                 r.pace,
                                                                 r.lag,
                                                                 )
-                        )
+              )
         row = "{:<6} {:>10} {:>12} {:>14}   {}"
         print(row.format("VP",
-                          "Split time",
-                          "Split pace",
-                          "Time (total)",
-                          "", # placeholder for note
-                          ))
+                         "Split time",
+                         "Split pace",
+                         "Time (total)",
+                         "",  # placeholder for note
+                         ))
         for stage in r.stages:
             t = r.stages[stage].time_total.total_seconds()
             time_total = "{}:{:>02}:{:>02}".format(int(t // 3600),
-                                           int(t % 3600 // 60),
-                                           int(t % 60,))
+                                                   int(t % 3600 // 60),
+                                                   int(t % 60,),
+                                                   )
             print(row.format(stage,
                              r.stages[stage].time,
                              r.stages[stage].pace,
