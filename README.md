@@ -23,13 +23,13 @@
 
 ```python
 from analyze100miles import Results
-res = Results(2014) # lädt die Daten des Jahres 2014
+res = Results(2018) # lädt die Daten des Jahres 2018
 ```
 
 ### Streckeninfo
 
 ```python
-print(res.course_info)
+res.course_info()
 ```
 
 #### Ausgabe
@@ -39,11 +39,11 @@ Verpflegungspunkte/Zeitmessung
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 VP    Split km  Abs km    Name
 ---------------------------------------------------------------------------------
-VP1   7,3       7,3       Brandenburger Tor
-VP2   6,46      13,76     East Side Gallery
+VP1   8,6       8,6       Checkpoint Charlie
+VP2   4,8       13,4      East Side Gallery
 [...]
-VP27  3,02      157,94    Wollankstrasse
-Ziel  3,96      161,9     Friedrich-Ludwig-Jahn-Sportpark
+VP26  3,0       157,4     Wollankstrasse
+Ziel  3,9       161,3     Friedrich-Ludwig-Jahn-Sportpark
 ---------------------------------------------------------------------------------
 ```
 
@@ -73,56 +73,77 @@ res.vp_stats("VP5", "all", 0) # listet alle
 #### Ausgabe
 
 ```
-VP5 - U-Bahnhof Rudow - km 31,2
+VP5 - Imbiss "Am Ziel"/Dörferblick - km 31,4
 ************************************************************************
-Anzahl Läufer: 254
+Anzahl Läufer/Staffeln: 507 von 508 (99.8 %)
 
-1.: 8:20:08 Uhr - Nagata, Tsutomu (239)
-2.: 8:24:18 Uhr - Perkins, Mark (177)
-3.: 8:25:07 Uhr - Bonfiglio, Marco (199)
-4.: 8:26:24 Uhr - Morstabilini, luca (203)
-5.: 8:27:00 Uhr - Tribius, Thomas (228)
-6.: 8:38:49 Uhr - Brade, Benjamin (181)
-7.: 8:38:55 Uhr - Klug, Matthias (216)
-8.: 8:39:00 Uhr - Strykowski, Jaroslaw (135)
-9.: 8:41:20 Uhr - Lingg, Dieter (210)
-10.: 8:42:32 Uhr - Kuehner, Christof (268)
+  1:  8:41:17 Uhr - Ishikawa, Yoshihiko (5)
+  2:  8:42:03 Uhr - RUEL, Stephane (4)
+  3:  8:45:36 Uhr - Dehling, Sascha (1)
+  4:  8:45:38 Uhr - Laenger, Uwe (418)
+  5:  8:46:29 Uhr - Iguchi, Shinpei (429)
+  6:  8:49:11 Uhr - Jänicke, Marc Cornelius (2)
+  7:  8:53:30 Uhr - Wiegand, Frank (362)
+  8:  8:53:30 Uhr - Wilsdorf, Stefan (453)
+  9:  8:54:16 Uhr - Strykowski, Jaroslaw (95)
+ 10:  8:55:51 Uhr - Tribius, Thomas (346)
 
-25 %:  9:13:54 Uhr
-50 %:  9:35:07 Uhr
-75 %:  9:53:32 Uhr
-100 %: 11:07:10 Uhr (Läufer, Besen)
+25 %:  9:45:34 Uhr
+50 %:  10:10:14 Uhr
+75 %:  10:29:12 Uhr
+100 %: 12:00:10 Uhr (Besenstaffel)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Split pace in min/km
 
-1.:  4:54 (Bonfiglio, Marco)
-2.:  5:03 (Perkins, Mark)
-3.:  5:03 (Morstabilini, luca)
-4.:  5:05 (Zugspitz Trailer)
-5.:  5:09 (Nagata, Tsutomu)
+1: 4:13 - FH Runners Berlin (4029)
+2: 4:22 - Ishikawa, Yoshihiko (5)
+3: 4:22 - BSG EDEKA (1022)
+4: 4:25 - Die Meisels (4002)
+5: 4:27 - RUEL, Stephane (4)
 ************************************************************************
 ```
 
 ### Ranking
 
 ```python
-print(res.ranking)
+# Ausgabe der Ergebnislisten nach Kategorie
+
+res.ranking("m")
+res.ranking("f")
+res.ranking("r2")
+res.ranking("r4")
+res.ranking("r10")
+
+# Ausnahme: Ergebnisse von 2011 sind nicht kategorisiert
+
+res.ranking()
 ```
 
-### Ausgabe
+#### Ausgabe
 
 ```
-Ranking
-~~~~~~~
-Platz StartNr Name                      Zeit       Kategorie
------------------------------------------------------------------
-1     177     Perkins, Mark             13:06:52   Senioren M30 (30-34 Jahre)
-2     199     Bonfiglio, Marco          14:04:27   Senioren M35 (35-39 Jahre)
+~~~~~~~~~~~~~~~~~~~~~~~~~
+Ranking 
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Finisher: 259  (82.7 %)
+DNF:      53   (16.9 %)
+DSQ:      1    (0.3 %)
+-------------------------
+Total:    313
+=========================
+
+---------------------------------------------------------------------------------
+Platz  StartNr Name                                     Zeit       Kategorie
+---------------------------------------------------------------------------------
+1      5       Ishikawa, Yoshihiko                      13:17:41   Senioren M30 (30-34 Jahre)
+2      418     Laenger, Uwe                             14:30:53   Senioren M50 (50-54 Jahre)
 [...]
-1     266     Seidel, Grit              18:16:29   Seniorinnen W40 (40-44 Jahre)
+DNF    196     Kuhn, Enrico                             fehlt!     Senioren M30 (30-34 Jahre)
+DNF    446     Kohlsdorf, Detlef                        fehlt!     Senioren M55 (55-59 Jahre)
 [...]
-15    10000   Läufer, Besen             29:01:19   Staffel 4 x 40 km
-[...]
+DSQ    4       RUEL, Stephane                           14:25:24   Senioren M50 (50-54 Jahre)
+---------------------------------------------------------------------------------
 ```
 
 ### Läuferdetails
@@ -134,17 +155,16 @@ res.runner_stats(100) # StartNr, siehe Ranking/Durchlaufzeiten
 #### Ausgabe
 
 ```
-Name: Deák, Andreas - Platz: 169
-StartNr: 100 - Kategorie: Senioren M50 (50-54 Jahre)
-Zeit: 28:23:58 - Pace: 10:35 min/km
+Name: Roch, Karl (GER) - Platz: 92
+StartNr: 100 - Kategorie: Senioren M55 (55-59 Jahre)
+Zeit: 22:13:56 - Pace: 8:14 - Rückstand: 8:56:15
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-VP    Split time Split pace Time (total)
-VP1   01:04:55   7:11       1:04:55
-VP2   00:41:11   6:53       1:46:06
+VP     Split time   Split pace   Time (total)   
+VP1      00:57:29         6:41        0:57:29   
+VP2      00:26:53         5:36        1:24:22   
 [...]
-VP26  01:02:08   10:52      27:10:19
-VP27  00:30:12   9:46       27:40:31
-Ziel  00:43:27   11:33      28:23:58
+VP26     00:34:49        11:13       21:36:29   
+Ziel     00:37:27         8:55       22:13:56   
 ```
 
 ## Übertragbarkeit auf andere mit SPORTident erfasste Veranstaltungen
