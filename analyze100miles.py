@@ -42,6 +42,8 @@ class Results:
     
     def __init__(self, year=0):  # avoid missing positional argument TypeError
         
+        """initialize class, pass year as argument"""
+        
         if year in YEAR_COURSE.keys():
             self.year = year
             
@@ -160,6 +162,27 @@ Verpflegungspunkte/Zeitmessung
         for tag in TAGS.keys():
             for _rank, startnr in enumerate(ranking[tag]["FIN"], 1):
                 results[startnr].rank = _rank
+                # adjust lag to category winner
+                if _rank == 1:
+                    h, m, s = results[startnr].finishtime.split(":")
+                    _win_time = datetime.timedelta(hours=int(h),
+                                                   minutes=int(m),
+                                                   seconds=int(s))
+                    results[startnr].lag = "---"
+                else:
+                    h, m, s = results[startnr].finishtime.split(":")
+                    _run_time = datetime.timedelta(hours=int(h),
+                                                   minutes=int(m),
+                                                   seconds=int(s))
+                    _delta = _run_time - _win_time
+                    
+                    _lagstr = "+{}:{:>02}:{:>02}".format(
+                        int(_delta.total_seconds() // 3600),
+                        int(_delta.total_seconds() % 3600 // 60),
+                        int(_delta.total_seconds() % 60),
+                                                          )
+                    results[startnr].lag = _lagstr
+
             # rank column empty for DNS in 2017
             for startnr in ranking[tag]["DNS"]:
                 results[startnr].rank = _rank
@@ -168,14 +191,15 @@ Verpflegungspunkte/Zeitmessung
 
     def ranking(self, tag="all"):  # avoid missing positional arg TypeError
 
-        """ranking table by category
+        """
+        ranking table by category
            
-           Argument:
-                tag: "f": women's results 
-                     "m": men's results 
-                     "r2": 2-person relay
-                     "r4": 4-person relay
-                     "r10": 10plus-person relay
+        Argument:
+            tag: "f": women's results 
+                 "m": men's results 
+                 "r2": 2-person relay
+                 "r4": 4-person relay
+                 "r10": 10plus-person relay
         """
         
         if tag not in TAGS.keys() and self.year > 2011:
@@ -246,9 +270,9 @@ Total:    {}
 
     def _runner_details_rr(self, data, vp_index):
         
-        """reads data list and returns dict of namedtuples with runner
-           details and stage times
-           processes raceresult data (2021+)
+        """
+        reads data list and returns dict of namedtuples with runner
+        details and stage time processes raceresult data (2021+)
         """
         
         # results as dict of "startnr: namedtuple" items
@@ -314,7 +338,8 @@ Total:    {}
                     stage_time.append("")
                     stage_total.append(total)
                 
-                # pace is overall pace, TODO calculate split pace
+                # bug in 2021's raw data: pace is overall pace
+                # FIXME calculate split pace
                 for p in d[14:96:3]:
                     stage_pace.append(p)
                 
@@ -327,26 +352,26 @@ Total:    {}
 
                 if d[6] == "m":
                     tag = "m"
-                    starttime = datetime.timedelta(hours=6)
+                    _starttime = datetime.timedelta(hours=6)
                     cat = d[2].split("(")[1][:-1]  # in brackets in name column
                     _name = d[2].split("(")[0][:-1]  # cut category after name
                 elif d[6] == "w":
                     tag = "f"
-                    # TODO starttime in course info
-                    starttime = datetime.timedelta(hours=6)
+                    # TODO idea: starttime in course info
+                    _starttime = datetime.timedelta(hours=6)
                     cat = d[2].split("(")[1][:-1]  # in brackets in name column
                     _name = d[2].split("(")[0][:-1]
                 elif d[5] == "2er":
                     tag = "r2"
-                    starttime = datetime.timedelta(hours=7)
+                    _starttime = datetime.timedelta(hours=7)
                     cat = TAGS[tag]
                 elif d[5] == "4er":
                     tag = "r4"
-                    starttime = datetime.timedelta(hours=7, minutes=30)
+                    _starttime = datetime.timedelta(hours=7, minutes=30)
                     cat = TAGS[tag]
                 elif d[5] == "10+":
                     tag = "r10"
-                    starttime = datetime.timedelta(hours=8)
+                    _starttime = datetime.timedelta(hours=8)
                     cat = TAGS[tag]
                 else:
                     # shouldn't happen but will nonetheless
@@ -359,8 +384,8 @@ Total:    {}
                     "nation": d[3],
                     "cat": cat,
                     "tag": tag,
-                    "starttime": starttime,
-                    "time": d[9],  # TODO calculate overall time
+                    "starttime": _starttime,
+                    "finishtime": d[9],
                     "pace": d[10],
                     "lag": d[11],
                     "stages": stages,
@@ -375,8 +400,9 @@ Total:    {}
 
     def _runner_details_si(self, data, vp_index):
         
-        """reads data list and returns list of namedtuples with runner details
-           and stage times, processes SportIdent data (-2018)
+        """
+        reads data list and returns list of namedtuples with runner
+        details and stage times, processes SportIdent data (-2018)
         """
         
         # results as dict of "startnr: namedtuple" items
@@ -441,8 +467,7 @@ Total:    {}
                             or d[7].startswith("4er"):
                         tag = "r4"
                         cat = TAGS[tag]
-                    elif d[8].startswith("10Plus")\
-                            or d[8].startswith("10er")\
+                    elif d[8].startswith("10")\
                             or d[7].startswith("10+"):
                         tag = "r10"
                         cat = TAGS[tag]
@@ -461,7 +486,7 @@ Total:    {}
                     "cat": cat,
                     "tag": tag,
                     "starttime": starttime,
-                    "time": d[11], 
+                    "finishtime": d[11], 
                     "pace": d[12].split(" min/km")[0],
                     "lag": d[13],
                     "stages": stages,
@@ -476,22 +501,23 @@ Total:    {}
 
     def vp_stats(self, vp, tag="all", list_runners=10):
         
-        """reads all runner results at a given vp (refreshing point = time
-           measurement) and returns string with first 3/quartils times of
-           passing the vp.
-           
-           Arguments:
-                vp: pass vp index as string, p.e. "VP1"..."Ziel"
-                tag: "all" (default): include single runners and relays
-                     "f": women's results only
-                     "m": men's results only
-                     "r": relay results only
-                     "r2": 2-person relay
-                     "r4": 4-person relay
-                     "r10": 10plus-person relay
-                list_runners: first number of runners to be listed
-                                - default is 10
-                                - use 0 to show all
+        """
+        reads all runner results at a given vp (refreshing point = time
+        measurement) and returns string with first 3/quartils times of
+        passing the vp.
+       
+        Arguments:
+            vp: pass vp index as string, p.e. "VP1"..."Ziel"
+            tag: "all" (default): include single runners and relays
+                 "f": women's results only
+                 "m": men's results only
+                 "r": relay results only
+                 "r2": 2-person relay
+                 "r4": 4-person relay
+                 "r10": 10plus-person relay
+            list_runners: first number of runners to be listed
+                            - default is 10
+                            - use 0 to show all
         """
         pass_all = []
         pace = []
@@ -551,11 +577,7 @@ Anzahl Läufer/Staffeln: {} von {} ({} %)
             list_runners = len(pass_all)
         for i in range(list_runners):
             returnstring += """{:>3}:  {} Uhr - {} ({})
-""".format(i + 1,
-           pass_all[i][0],
-           pass_all[i][1],
-           pass_all[i][2],
-           )
+""".format(i + 1, pass_all[i][0], pass_all[i][1], pass_all[i][2])
 
         returnstring += """
 25 %:  {} Uhr
@@ -599,7 +621,7 @@ Zeit: {} - Pace: {} - Rückstand: {}
                                                                 r.rank,
                                                                 nr,
                                                                 r.cat,
-                                                                r.time,
+                                                                r.finishtime,
                                                                 r.pace,
                                                                 r.lag,
                                                                 )
