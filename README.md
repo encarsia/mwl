@@ -66,7 +66,7 @@ res.vp_stats("VP5", "r10")
 
 res.vp_stats("VP5", "f", 3) # listet die ersten 3 Männer 
 res.vp_stats("VP5", "m", 20) # listet die ersten 20 Frauen
-res.vp_stats("VP5", "r", 0) # listet alle Staffeln
+res.vp_stats("VP5", "r4", 0) # listet alle 4er-Staffeln
 res.vp_stats("VP5", "all", 0) # listet alle
 ```
 
@@ -166,6 +166,10 @@ VP2      00:26:53         5:36        1:24:22
 VP26     00:34:49        11:13       21:36:29   
 Ziel     00:37:27         8:55       22:13:56   
 ```
+
+#### Bug in Daten von 2021
+
+> "Split pace" zeigt nicht die Pace zwischen zwei Messpunkten, sondern die kumulierte Gesamtpace.
 
 ## Übertragbarkeit auf andere mit SPORTident erfasste Veranstaltungen
 
