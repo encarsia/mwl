@@ -10,9 +10,12 @@
 
 ## Daten
 
-* die Daten wurden von [SPORTident](https://www.sportident.com/) erfasst und sind als csv-Dateien verfügbar (oben rechts unter "Downloads" auf der jeweiligen Veranstaltungsseite)
-* die von der SPORTident-Webseite heruntergeladenen csv-Dateien sind nicht UTF-8-kodiert
+* 2013 - 2018: die Daten wurden von [SPORTident](https://www.sportident.com/) erfasst und sind als csv-Dateien verfügbar (oben rechts unter "Downloads" auf der jeweiligen Veranstaltungsseite); die von der SPORTident-Webseite heruntergeladenen csv-Dateien sind nicht UTF-8-kodiert
+* ab 2021: die Daten wurden von [race result](https://www.raceresult.com) erfasst; die csv-Dateien wurden auf Anfrage zur Verfügung gestellt; [Ergebnisse bei race result](http://my.raceresult.com/184322/)
 * die Ergebnislisten befinden sich im Ordner ``results``
+* fehlende Daten:
+    * 2019: keine verwertbaren Daten bzw. Zwischenzeiten aufgrund eines technischen Problems
+    * 2020: Veranstaltung wegen Covid19 abgesagt
 
 ## Benutzung
 

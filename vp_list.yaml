@@ -437,3 +437,112 @@ counterclockwise:
     km_kum: 161,70
 
 
+counterclockwise_eis:
+  VP1:
+    name: Mauerpark
+    km: 4,5
+    km_kum: 4,5
+  VP2:
+    name: Wilhelmsruh
+    km: 5,5
+    km_kum: 10,0
+  VP3:
+    name: Lauftreff Lübars
+    km: 5,6
+    km_kum: 15,6
+  VP4:
+    name: Oranienburger Chaussee
+    km: 5,5
+    km_kum: 21,1
+  VP5:
+    name: Naturschutzturm
+    km: 5,0
+    km_kum: 26,1
+  VP6:
+    name: Frohnau
+    km: 5,1
+    km_kum: 31,2
+  VP7/WP1:
+    name: Ruderclub Oberhavel
+    km: 5,4
+    km_kum: 36,6
+  VP8:
+    name: Grenzturm Nieder Neuendorf
+    km: 4,8
+    km_kum: 41,4
+  VP9:
+    name: Schönwalde
+    km: 7,5
+    km_kum: 48,9
+  VP10:
+    name: Falkenseer Chaussee
+    km: 5,7
+    km_kum: 54,6
+  VP11:
+    name: Karolinenhöhe
+    km: 6,4
+    km_kum: 61,0
+  VP12:
+    name: Pagel & Friends
+    km: 5,5
+    km_kum: 66,0
+  VP13/WP2:
+    name: Schloss Sacrow
+    km: 7,6
+    km_kum: 73,6
+  VP14:
+    name: Revierförsterei Krampnitz
+    km: 6,3
+    km_kum: 79,9
+  VP15:
+    name: Brauhaus Meierei
+    km: 5,6
+    km_kum: 85,5
+  VP16:
+    name: Gedenkstätte Griebnitzsee
+    km: 6,8
+    km_kum: 92,3
+  VP17:
+    name: Königsweg
+    km: 6,9
+    km_kum: 99,2
+  VP18/WP3:
+    name: Sportplatz Teltow
+    km: 6,2
+    km_kum: 105,4
+  VP19:
+    name: Osdorfer Straße
+    km: 6,5
+    km_kum: 111,9
+  VP20:
+    name: Ninas Eltern
+    km: 6,1
+    km_kum: 118,0
+  VP21:
+    name: Buckow
+    km: 8,5
+    km_kum: 126,5
+  VP22:
+    name: Rudow
+    km: 7,1
+    km_kum: 133,6
+  VP23:
+    name: Johannisthaler Chaussee
+    km: 5,9
+    km_kum: 139,5
+  VP24:
+    name: Dammweg
+    km: 5,6
+    km_kum: 145,1
+  VP25:
+    name: East Side Gallery
+    km: 5,7
+    km_kum: 150,8
+  VP26:
+    name: Checkpoint Charlie
+    km: 4,8
+    km_kum: 155,6
+  Ziel:
+    name: Erika-Hess-Eisstadion
+    km: 5,7
+    km_kum: 161,3

@@ -23,6 +23,7 @@ YEAR_COURSE = {2011: "clockwise_2011",
                2017: "counterclockwise",
                2018: "clockwise_new",
                2021: "clockwise_new",
+               2022: "counterclockwise_eis",
                }
 
 TAGS = {"f": "Frauen",
@@ -71,7 +72,7 @@ class Results:
 
     def _read_csv(self, filename):
         
-        """returns results from SportIdent csv file as list"""
+        """returns results from SportIdent/raceresult csv file as list"""
         
         with open(filename) as f:
             reader = csv.reader(f, delimiter=";")
@@ -105,33 +106,33 @@ Verpflegungspunkte/Zeitmessung
         ranking = {"m": {"FIN": [],
                          "DNF": [],
                          "DSQ": [],
-                         "DNS": [],  # 2017
+                         "DNS": [],
                          },
                    "f": {"FIN": [],
                          "DNF": [],
                          "DSQ": [],
-                         "DNS": [],  # 2017
+                         "DNS": [],
                          },
                    "r2": {"FIN": [],
                           "DNF": [],
                           "DSQ": [],
-                          "DNS": [],  # 2017
+                          "DNS": [], 
                           },
                    "r4": {"FIN": [],
                           "DNF": [],
                           "DSQ": [],
-                          "DNS": [],  # 2017
+                          "DNS": [],
                           },
                    "r10": {"FIN": [],
                            "DNF": [],
                            "DSQ": [],
-                           "DNS": [],  # 2017
+                           "DNS": [],
                            },
-                   # for 2011 results only
+                   # 2011 results only
                    "all": {"FIN": [],
                            "DNF": [],
                            "DSQ": [],
-                           "DNS": [],  # 2017
+                           "DNS": [],
                            },
                    }
 
@@ -140,11 +141,12 @@ Verpflegungspunkte/Zeitmessung
                 ranking[r.tag]["DNF"].append(startnr)
             elif "DSQ" in r.rank:
                 ranking[r.tag]["DSQ"].append(startnr)
-            elif r.rank == "":
+            elif "DNS" in r.rank or r.rank == "":
                 ranking[r.tag]["DNS"].append(startnr)
             else:
                 # ordered list of finishers
                 ranking[r.tag]["FIN"].append(startnr)
+
 
         # add total numbers of starters for later use in vp_stats and ranking
         # table, don't count DNS
@@ -184,8 +186,9 @@ Verpflegungspunkte/Zeitmessung
                     results[startnr].lag = _lagstr
 
             # rank column empty for DNS in 2017
-            for startnr in ranking[tag]["DNS"]:
-                results[startnr].rank = _rank
+            if self.year == 2017:
+                for startnr in ranking[tag]["DNS"]:
+                    results[startnr].rank = "DNS"
 
         return results, ranking
 
@@ -214,7 +217,7 @@ Verpflegungspunkte/Zeitmessung
         stats = (len(ranking_list["FIN"]),
                  len(ranking_list["DNF"]),
                  len(ranking_list["DSQ"]),
-                 len(ranking_list["DNS"]),  # only in 2017
+                 len(ranking_list["DNS"]), # 2017 & 2022
                  ranking_list["total"],
                  )
 
@@ -246,15 +249,16 @@ Total:    {}
                                    "Kategorie"
                                    )
         returnstring += RULE
-        
+                
         for _ in ("FIN", "DNF", "DSQ", "DNS"):
             for startnr in ranking_list[_]:
                 returnstring += row.format(self.results[startnr].rank,
                                            startnr,
                                            self.results[startnr].name,
-                                           self.results[startnr].time,
+                                           self.results[startnr].finishtime,
                                            self.results[startnr].cat,
                                            )
+
             if len(ranking_list[_]) > 0:  # avoid unnecessary rules
                 returnstring += RULE
         
@@ -279,7 +283,7 @@ Total:    {}
         res = dict()
         
         for d in data:
-            if d[1] != "StartNr":  # ignore table headers
+            if d != data[0]:  # ignore table headers
                 stage_time = []
                 stage_pace = []
                 stage_total = []
@@ -626,7 +630,7 @@ Zeit: {} - Pace: {} - Rückstand: {}
                                                                 r.lag,
                                                                 )
               )
-        row = "{:<6} {:>10} {:>12} {:>14}   {}"
+        row = "{:<8} {:>10} {:>12} {:>14}   {}"
         print(row.format("VP",
                          "Split time",
                          "Split pace",
